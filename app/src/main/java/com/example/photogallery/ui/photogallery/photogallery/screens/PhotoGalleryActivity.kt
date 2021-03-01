@@ -5,11 +5,13 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.example.photogallery.R
 import com.example.photogallery.ui.photogallery.util.Router
+import com.example.photogallery.ui.photogallery.view.gallery.PhotoGalleryFragment
 
 class PhotoGalleryActivity : AppCompatActivity(), Router {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        if (savedInstanceState == null) openPhotoGallery()
     }
 
     private fun openFragment(fragment: Fragment, addToBackStack: Boolean = false) {
@@ -22,6 +24,6 @@ class PhotoGalleryActivity : AppCompatActivity(), Router {
     }
 
     override fun openPhotoGallery() {
-        TODO("Not yet implemented")
+        openFragment(fragment = PhotoGalleryFragment.newInstance(), addToBackStack = true)
     }
 }
