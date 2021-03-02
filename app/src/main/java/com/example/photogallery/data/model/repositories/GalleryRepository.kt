@@ -9,9 +9,9 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class GalleryRepository {
-    fun fetchContents() : LiveData<String>{
+    fun fetchPhotos() : LiveData<String>{
         val responseLiveData = MutableLiveData<String>()
-        val request = RetrofitModule.api.fetchContents()
+        val request = RetrofitModule.api.fetchPhotos()
 
         request.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {

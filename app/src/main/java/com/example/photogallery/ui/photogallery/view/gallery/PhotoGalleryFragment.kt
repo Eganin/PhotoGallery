@@ -16,7 +16,7 @@ class PhotoGalleryFragment : Fragment(R.layout.fragment_photo_gallery) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI(view=view)
-        GalleryRepository().fetchContents().observe(viewLifecycleOwner,{Log.d(TAG,it)})
+        GalleryRepository().fetchPhotos().observe(viewLifecycleOwner,{Log.d(TAG,it)})
     }
 
     private fun setupUI(view: View){
