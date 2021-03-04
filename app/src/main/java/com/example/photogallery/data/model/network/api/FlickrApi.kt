@@ -1,5 +1,6 @@
 package com.example.photogallery.data.model.network.api
 
+import com.example.photogallery.data.model.entities.FlickResponse
 import com.example.photogallery.data.model.network.RetrofitModule.API_KEY
 import com.example.photogallery.data.model.network.RetrofitModule.CALLBACK
 import com.example.photogallery.data.model.network.RetrofitModule.CALLBACK_REQUEST
@@ -19,5 +20,5 @@ interface FlickrApi {
         @Query(FORMAT_REQUEST) format : String = FORMAT,
         @Query(CALLBACK_REQUEST) callback : Int = CALLBACK,
         @Query(EXTRAS_REQUEST) extras : String = EXTRAS
-    ): Call<String>
+    ): Call<FlickResponse>
 }

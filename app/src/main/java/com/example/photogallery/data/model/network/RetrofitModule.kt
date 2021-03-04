@@ -2,6 +2,7 @@ package com.example.photogallery.data.model.network
 
 import com.example.photogallery.data.model.network.api.FlickrApi
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.create
 
@@ -18,7 +19,7 @@ object RetrofitModule {
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
-        .addConverterFactory(ScalarsConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     val api: FlickrApi = retrofit.create()
