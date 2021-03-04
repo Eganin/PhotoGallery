@@ -1,6 +1,7 @@
 package com.example.photogallery.data.model.network
 
 import com.example.photogallery.data.model.network.api.FlickrApi
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -14,12 +15,18 @@ object RetrofitModule {
     const val FORMAT = "json"
     const val EXTRAS_REQUEST = "extras"
     const val EXTRAS = "url_s"
-    const val CALLBACK_REQUEST= "nojsoncallback"
+    const val CALLBACK_REQUEST = "nojsoncallback"
     const val CALLBACK = 1
+    const val TEXT_REQUEST = "text"
+
+    private val client = OkHttpClient.Builder()
+        .addInterceptor(PhotoInterceptor())
+        .build()
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
+        .client(client)
         .build()
 
     val api: FlickrApi = retrofit.create()

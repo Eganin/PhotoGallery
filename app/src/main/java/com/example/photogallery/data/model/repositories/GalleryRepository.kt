@@ -12,11 +12,17 @@ import retrofit2.Response
 
 class GalleryRepository {
 
-    private lateinit var call : Call<FlickResponse>
+    private lateinit var call: Call<FlickResponse>
 
-    fun fetchPhotos(): LiveData<List<GalleryItem>> {
+    fun fetchPhotos() = fetchPhotoMetaData(request = RetrofitModule.api.fetchPhotos())
+
+    fun searchPhotos(query: String) =
+        fetchPhotoMetaData(request = RetrofitModule.api.searchPhotos(query = query))
+
+
+    private fun fetchPhotoMetaData(request: Call<FlickResponse>): LiveData<List<GalleryItem>> {
         val responseLiveData = MutableLiveData<List<GalleryItem>>()
-        call = RetrofitModule.api.fetchPhotos()
+        call = request
 
         call.enqueue(object : Callback<FlickResponse> {
             override fun onResponse(call: Call<FlickResponse>, response: Response<FlickResponse>) {
@@ -35,7 +41,7 @@ class GalleryRepository {
         return responseLiveData
     }
 
-    fun cancelRequest(){
-        if(::call.isInitialized) call.cancel()
+    fun cancelRequest() {
+        if (::call.isInitialized) call.cancel()
     }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +20,7 @@ class PhotoGalleryFragment : Fragment(R.layout.fragment_photo_gallery) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         photoGalleryViewModel =
-            ViewModelProviders.of(this@PhotoGalleryFragment).get(PhotoGalleryViewModel::class.java)
+            ViewModelProvider(this@PhotoGalleryFragment)[PhotoGalleryViewModel::class.java]
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

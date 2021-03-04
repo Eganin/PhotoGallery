@@ -7,7 +7,7 @@ import com.example.photogallery.data.model.repositories.GalleryRepository
 
 class PhotoGalleryViewModel : ViewModel(){
 
-    val galleryItem : LiveData<List<GalleryItem>> = GalleryRepository().fetchPhotos()
+    val galleryItem : LiveData<List<GalleryItem>> = GalleryRepository().searchPhotos("planets")
     private val repository = GalleryRepository()
 
     override fun onCleared() {
