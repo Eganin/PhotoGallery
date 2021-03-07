@@ -14,11 +14,14 @@ class GalleryRepository {
 
     private lateinit var call: Call<FlickResponse>
 
-    fun fetchPhotos() = fetchPhotoMetaData(request = RetrofitModule.api.fetchPhotos())
+    fun fetchPhotos() = fetchPhotoMetaData(request = fetchPhotosRequest())
 
     fun searchPhotos(query: String) =
-        fetchPhotoMetaData(request = RetrofitModule.api.searchPhotos(query = query))
+        fetchPhotoMetaData(request = searchPhotosRequest(query=query))
 
+    fun fetchPhotosRequest() = RetrofitModule.api.fetchPhotos()
+
+    fun searchPhotosRequest(query : String) = RetrofitModule.api.searchPhotos(query=query)
 
     private fun fetchPhotoMetaData(request: Call<FlickResponse>): LiveData<List<GalleryItem>> {
         val responseLiveData = MutableLiveData<List<GalleryItem>>()
