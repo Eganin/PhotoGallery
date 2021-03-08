@@ -11,13 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
+import androidx.work.*
 import com.example.photogallery.R
 import com.example.photogallery.data.PollWorker
+import com.example.photogallery.data.storage.QueryPreferences
 import com.example.photogallery.ui.photogallery.viewmodel.PhotoGalleryViewModel
+import java.util.concurrent.TimeUnit
 
 class PhotoGalleryFragment : Fragment(R.layout.fragment_photo_gallery) {
 
@@ -29,17 +28,6 @@ class PhotoGalleryFragment : Fragment(R.layout.fragment_photo_gallery) {
         photoGalleryViewModel =
             ViewModelProvider(this@PhotoGalleryFragment)[PhotoGalleryViewModel::class.java]
         setHasOptionsMenu(true)
-
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.UNMETERED)
-            .build()
-
-        val workRequest = OneTimeWorkRequest
-            .Builder(PollWorker::class.java)
-            .setConstraints(constraints)
-            .build()
-        WorkManager.getInstance()
-            .enqueue(workRequest)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,6 +54,7 @@ class PhotoGalleryFragment : Fragment(R.layout.fragment_photo_gallery) {
                     photoGalleryViewModel.fetchPhotos(queryText)
                     return true
                 }
+
                 override fun onQueryTextChange(queryText: String): Boolean {
                     Log.d(TAG, "QueryTextChange: $queryText")
                     return false
@@ -73,15 +62,51 @@ class PhotoGalleryFragment : Fragment(R.layout.fragment_photo_gallery) {
             })
 
             setOnSearchClickListener {
-                searchView.setQuery(photoGalleryViewModel.searchTerm,false)
+                searchView.setQuery(photoGalleryViewModel.searchTerm, false)
             }
+
+            val toggleItem = menu.findItem(R.id.menu_item_toggle_polling)
+
+            val toggleItemTitle = if (QueryPreferences.isPolling(context = requireContext())) {
+                R.string.stop_polling
+            } else {
+                R.string.start_polling
+            }
+
+            toggleItem.title = toggleItemTitle.toString()
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId){
-            R.id.menu_item_clear->{
+        return when (item.itemId) {
+            R.id.menu_item_clear -> {
                 photoGalleryViewModel.fetchPhotos(query = "")
+                true
+            }
+            R.id.menu_item_toggle_polling -> {
+                val isPolling = QueryPreferences.isPolling(context = requireContext())
+                if (isPolling) {
+                    WorkManager.getInstance().cancelUniqueWork(POLL_WORK)
+                    QueryPreferences.setPolling(context = requireContext(), isOn = false)
+                } else {
+                    val constraints = Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.UNMETERED)
+                        .build()
+
+                    val periodicRequest = PeriodicWorkRequest
+                        .Builder(PollWorker::class.java, 15, TimeUnit.MINUTES)
+                        .setConstraints(constraints)
+                        .build()
+
+                    WorkManager.getInstance().enqueueUniquePeriodicWork(
+                        POLL_WORK,
+                        ExistingPeriodicWorkPolicy.KEEP,
+                        periodicRequest
+                    )
+
+                    QueryPreferences.setPolling(context=requireContext(),isOn=true)
+                }
+                activity?.invalidateOptionsMenu()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -98,6 +123,7 @@ class PhotoGalleryFragment : Fragment(R.layout.fragment_photo_gallery) {
 
     companion object {
         private const val TAG = "PhotoGalleryFragment"
+        private const val POLL_WORK = "POLL_WORK"
 
         fun newInstance() = PhotoGalleryFragment()
     }

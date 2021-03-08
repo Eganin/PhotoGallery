@@ -1,5 +1,7 @@
 package com.example.photogallery.ui.photogallery.photogallery.screens
 
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -25,5 +27,9 @@ class PhotoGalleryActivity : AppCompatActivity(), Router {
 
     override fun openPhotoGallery() {
         openFragment(fragment = PhotoGalleryFragment.newInstance(), addToBackStack = true)
+    }
+
+    companion object {
+        fun newIntent(context: Context) = Intent(context, PhotoGalleryActivity::class.java)
     }
 }
