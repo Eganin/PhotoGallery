@@ -2,10 +2,7 @@ package com.example.photogallery.ui.photogallery.view.gallery
 
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -15,10 +12,11 @@ import androidx.work.*
 import com.example.photogallery.R
 import com.example.photogallery.data.PollWorker
 import com.example.photogallery.data.storage.QueryPreferences
+import com.example.photogallery.ui.photogallery.view.gallery.base.VisibleFragment
 import com.example.photogallery.ui.photogallery.viewmodel.PhotoGalleryViewModel
 import java.util.concurrent.TimeUnit
 
-class PhotoGalleryFragment : Fragment(R.layout.fragment_photo_gallery) {
+class PhotoGalleryFragment : VisibleFragment() {
 
     private lateinit var photoGalleryViewModel: PhotoGalleryViewModel
     private var recyclerView: RecyclerView? = null
@@ -29,6 +27,12 @@ class PhotoGalleryFragment : Fragment(R.layout.fragment_photo_gallery) {
             ViewModelProvider(this@PhotoGalleryFragment)[PhotoGalleryViewModel::class.java]
         setHasOptionsMenu(true)
     }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.fragment_photo_gallery, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -104,7 +108,7 @@ class PhotoGalleryFragment : Fragment(R.layout.fragment_photo_gallery) {
                         periodicRequest
                     )
 
-                    QueryPreferences.setPolling(context=requireContext(),isOn=true)
+                    QueryPreferences.setPolling(context = requireContext(), isOn = true)
                 }
                 activity?.invalidateOptionsMenu()
                 true

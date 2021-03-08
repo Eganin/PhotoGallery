@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.photogallery">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <permission android:name="com.example.photogallery.PRIVATE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.example.photogallery.PRIVATE"/>
+
     <application
         android:name=".application.PhotoGalleryApplication"
         android:allowBackup="true"
@@ -17,6 +23,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".ui.photogallery.util.NotificationReceiver"
+            android:permission="com.example.photogallery.PRIVATE"
+            android:exported="false"
+            >
+            <intent-filter  android:priority="-999">
+                <action
+                    android:name="com.example.photogallery.SHOW_NOTIFICATION" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
