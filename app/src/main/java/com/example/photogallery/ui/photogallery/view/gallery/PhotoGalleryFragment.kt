@@ -1,8 +1,10 @@
 package com.example.photogallery.ui.photogallery.view.gallery
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -77,14 +79,16 @@ class PhotoGalleryFragment : VisibleFragment() {
                 R.string.start_polling
             }
 
-            toggleItem.title = toggleItemTitle.toString()
+            toggleItem.title = context.getString(toggleItemTitle)
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_clear -> {
                 photoGalleryViewModel.fetchPhotos(query = "")
+                item.tooltipText=""
                 true
             }
             R.id.menu_item_toggle_polling -> {

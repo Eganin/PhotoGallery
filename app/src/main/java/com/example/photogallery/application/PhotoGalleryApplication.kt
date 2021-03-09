@@ -12,10 +12,10 @@ const val NOTIFICATION_CHANNEL_ID = "flick_poll"
 
 class PhotoGalleryApplication : Application() {
 
-    private val notificationManager = NotificationManagerCompat.from(applicationContext)
 
     override fun onCreate() {
         super.onCreate()
+        val notificationManager = NotificationManagerCompat.from(applicationContext)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && notificationManager.getNotificationChannel(
                 NOTIFICATION_CHANNEL_ID
             ) == null

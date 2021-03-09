@@ -16,8 +16,11 @@ class PhotoAdapter(private val galleryItems: List<GalleryItem>) :
                 .inflate(R.layout.list_item_gallery, parent, false) as ImageView
         )
 
-    override fun onBindViewHolder(holder: PhotoHolder, position: Int) =
-        holder.bind(url = galleryItems[position].url)
+    override fun onBindViewHolder(holder: PhotoHolder, position: Int) {
+        val item = galleryItems[position]
+        holder.bindGalleryItem(item = item)
+        holder.bind(url = item.url)
+    }
 
 
     override fun getItemCount() = galleryItems.size
